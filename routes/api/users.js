@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
+const bcrypt = require("bcryptjs");
+const User = require("../../models/user");
 // @route GET api/users/test
 // @desc Test public routes
 // @access Public
-
 router.get("/test", (req, resp) => {
   resp.json({ msg: "User works" });
 });
@@ -28,6 +29,20 @@ router.post("/register", (req, resp) => {
         email: req.body.email,
         avatar,
         password: req.body.password
+      });
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          else {
+            newUser.password = hash;
+            newUser
+              .save()
+              .then(user => {
+                resp.json(user);
+              })
+              .catch(err => console.log(err));
+          }
+        });
       });
     }
   });
