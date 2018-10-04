@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
+const passport = require("passport");
 const users = require("./routes/api/users");
 const posts = require("./routes/api/posts");
 const profile = require("./routes/api/profile");
@@ -22,9 +23,12 @@ mongoose
     console.log(error);
   });
 
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
+//Passport middleware
+
+app.use(passport.initialize());
+
+// Passport Config File
+require("./config/passport")(passport);
 
 app.use("/api/users", users);
 app.use("/api/profile", profile);
