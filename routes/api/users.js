@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
+
+const Profile = require("../../models/profile");
 // @route GET api/users/test
 // @desc Test public routes
 // @access Public
