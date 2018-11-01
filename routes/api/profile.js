@@ -9,6 +9,10 @@ const Profile = require("../../models/profile");
 //Loading User model
 const User = require("../../models/user");
 
+// @route GET   api/profile
+// @desc Get current users profile
+// @access private
+
 router.get("/test", (req, resp) => {
   resp.json({ msg: "Profile works" });
 });
@@ -89,4 +93,5 @@ router.post(
     });
   }
 );
+
 module.exports = router;
