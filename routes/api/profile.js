@@ -227,4 +227,74 @@ router.post(
     });
   }
 );
+
+// @route  DELETE api/profile/experience/:exp_id
+//@desc delete experience from profile
+//@access private
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      //Get remove index
+      const removeIndex = profile.experience
+        .map(item => item.id)
+        .indexOf(req.params.exp_id);
+
+      //Remove from array
+      profile.experience.splice(removeIndex, 1);
+      profile
+        .save()
+        .then(profile => {
+          res.json(profile);
+        })
+        .catch(err => {
+          res.status(404).json(err);
+        });
+    });
+  }
+);
+
+// @route  DELETE api/profile/education/:edu_id
+//@desc delete education from profile
+//@access private
+router.delete(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      //Get remove index
+      const removeIndex = profile.experience
+        .map(item => item.id)
+        .indexOf(req.params.edu_id);
+
+      //Remove from array
+      profile.education.splice(removeIndex, 1);
+      profile
+        .save()
+        .then(profile => {
+          res.json(profile);
+        })
+        .catch(err => {
+          res.status(404).json(err);
+        });
+    });
+  }
+);
+
+//@route DELETE api/profile/
+//@desc delete user and profile
+//@private
+
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOneAndDelete({ user: req.user.id }).then(() => {
+      User.findOneAndDelete({ _id: req.user.id }).then(() => {
+        res.json({ success: true });
+      });
+    });
+  }
+);
 module.exports = router;
