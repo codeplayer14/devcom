@@ -6,6 +6,7 @@ const passport = require("passport");
 //Load validation
 const validateProfileInput = require("../../validation/profile");
 
+const validateExperience = require("../../validation/experience");
 //Loading profile model
 const Profile = require("../../models/profile");
 
@@ -161,4 +162,36 @@ router.get("/all", (req, res) => {
       res.status(404).json(err);
     });
 });
+
+//@route POST api/profile/experience
+//@desc add experience to profile
+//@access Private
+router.post(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const { errors, isValid } = validateExperience(req.body);
+
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
+      const newExp = {
+        title: req.body.title,
+        company: req.body.company,
+        location: req.body.location,
+        from: req.body.from,
+        to: req.body.to,
+        current: req.body.current,
+        description: req.body.description
+      };
+
+      //adding to experience array
+      profile.experience.unshift(newExp);
+      profile.save().then(profile => {
+        res.json(profile);
+      });
+    });
+  }
+);
 module.exports = router;
