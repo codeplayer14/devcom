@@ -5,9 +5,7 @@ const passport = require("passport");
 
 //Load validation
 const validateProfileInput = require("../../validation/profile");
-
 const validateExperience = require("../../validation/experience");
-
 const validateEducation = require("../../validation/education");
 //Loading profile model
 const Profile = require("../../models/profile");

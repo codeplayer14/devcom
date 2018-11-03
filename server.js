@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
+
+//same passport passed everywhere-> uses a singleton concept
 const passport = require("passport");
 const db = require("./config/keys");
 
