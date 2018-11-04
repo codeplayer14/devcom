@@ -3,9 +3,12 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 
-//Load validation
+//Load validation for all
+//Load proifle
 const validateProfileInput = require("../../validation/profile");
+//Load experience
 const validateExperience = require("../../validation/experience");
+//Load education
 const validateEducation = require("../../validation/education");
 //Loading profile model
 const Profile = require("../../models/profile");
