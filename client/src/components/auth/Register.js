@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import axios from "axios";
+import classnames from "classnames";
 class Register extends Component {
   constructor() {
     super();
@@ -22,7 +23,13 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password
     };
-    console.log(newUser);
+
+    axios
+      .post("/api/users/register", newUser)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => this.setState({ errors: err.response.data }));
   }
   onChange(e) {
     //computed property
@@ -30,6 +37,7 @@ class Register extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
   render() {
+    const { errors } = this.state;
     return (
       <div className="register">
         <div className="container">
@@ -43,7 +51,9 @@ class Register extends Component {
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.name
+                    })}
                     placeholder="Name"
                     name="name"
                     value={this.state.name}
@@ -52,10 +62,12 @@ class Register extends Component {
                 </div>
                 <div className="form-group">
                   <input
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.email
+                    })}
                     onChange={this.onChange}
                     type="email"
                     value={this.state.email}
-                    className="form-control form-control-lg"
                     placeholder="Email Address"
                     name="email"
                   />
@@ -68,8 +80,10 @@ class Register extends Component {
                   <input
                     onChange={this.onChange}
                     type="password"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.password
+                    })}
                     value={this.state.password}
-                    className="form-control form-control-lg"
                     placeholder="Password"
                     name="password"
                   />
@@ -77,8 +91,10 @@ class Register extends Component {
                 <div className="form-group">
                   <input
                     onChange={this.onChange}
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.password2
+                    })}
                     type="password"
-                    className="form-control form-control-lg"
                     placeholder="Confirm Password"
                     name="password2"
                     value={this.state.password2}
