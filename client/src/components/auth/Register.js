@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 import classnames from "classnames";
-
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
+import PropTypes from "prop-types";
 class Register extends Component {
   constructor() {
     super();
@@ -25,12 +27,13 @@ class Register extends Component {
       password2: this.state.password
     };
 
-    axios
-      .post("/api/users/register", newUser)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => this.setState({ errors: err.response.data }));
+    this.props.registerUser(newUser);
+    // axios
+    //   .post("/api/users/register", newUser)
+    //   .then(res => {
+    //     console.log(res);
+    //   })
+    //   .catch(err => this.setState({ errors: err.response.data }));
   }
   onChange(e) {
     //computed property
@@ -38,9 +41,11 @@ class Register extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
   render() {
+    const { user } = this.props.auth;
     const { errors } = this.state;
     return (
       <div className="register">
+        {user ? user.name : null}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -110,4 +115,19 @@ class Register extends Component {
     );
   }
 }
-export default Register;
+
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  isAuth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    auth: state.auth
+  };
+};
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(Register);
